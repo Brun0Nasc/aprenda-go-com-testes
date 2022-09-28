@@ -24,6 +24,13 @@ func TestOla(t *testing.T) {
 		verificaMensagemCorreta(t, resultado, esperado)
 	})
 
+	t.Run("em russo", func(t *testing.T) {
+		resultado := Ola("Smirnoff", "russo")
+		esperado := "Привет, Smirnoff"
+
+		verificaMensagemCorreta(t, resultado, esperado)
+	})
+
 	t.Run("diz 'Olá, mundo' quando uma string vazia for passada", func(t *testing.T) {
 		resultado := Ola("", "")
 		esperado := "Olá, Mundo"
