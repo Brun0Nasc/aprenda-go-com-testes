@@ -2,10 +2,10 @@ package main
 
 import "fmt"
 
-func Ola() string {
-	return "Olá, mundo"
+func Ola(nome string) string{
+	return "Olá, " + nome
 }
 
-func main(){
-	fmt.Println(Ola())
+func main() {
+	fmt.Println(Ola("mundo"))
 }
