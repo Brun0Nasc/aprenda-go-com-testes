@@ -3,11 +3,11 @@ package main
 import "fmt"
 
 const (
-	espanhol = "espanhol"
-	frances = "francês"
+	espanhol            = "espanhol"
+	frances             = "francês"
 	prefixoOlaPortugues = "Olá, "
-	prefixoOlaEspanhol = "Hola, "
-	prefixoFrances = "Bonjour, "
+	prefixoOlaEspanhol  = "Hola, "
+	prefixoFrances      = "Bonjour, "
 )
 
 func Ola(nome, idioma string) string {
@@ -15,15 +15,16 @@ func Ola(nome, idioma string) string {
 		nome = "Mundo"
 	}
 
-	if idioma == espanhol {
-		return prefixoOlaEspanhol + nome
+	prefixo := prefixoOlaPortugues
+
+	switch idioma {
+	case frances:
+		prefixo = prefixoFrances
+	case espanhol:
+		prefixo = prefixoOlaEspanhol
 	}
 
-	if idioma == frances {
-		return prefixoFrances + nome
-	}
-
-	return prefixoOlaPortugues + nome
+	return prefixo + nome
 }
 
 func main() {
