@@ -2,15 +2,30 @@ package main
 
 import "fmt"
 
-const prefixoOla = "Olá, "
+const (
+	espanhol = "espanhol"
+	frances = "francês"
+	prefixoOlaPortugues = "Olá, "
+	prefixoOlaEspanhol = "Hola, "
+	prefixoFrances = "Bonjour, "
+)
 
-func Ola(nome string) string{
+func Ola(nome, idioma string) string {
 	if nome == "" {
 		nome = "Mundo"
 	}
-	return prefixoOla + nome
+
+	if idioma == espanhol {
+		return prefixoOlaEspanhol + nome
+	}
+
+	if idioma == frances {
+		return prefixoFrances + nome
+	}
+
+	return prefixoOlaPortugues + nome
 }
 
 func main() {
-	fmt.Println(Ola("mundo"))
+	fmt.Println(Ola("mundo", "espanhol"))
 }
