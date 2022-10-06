@@ -21,8 +21,8 @@ func TestSoma(t *testing.T) {
 }
 
 func TestSomaTodoOResto(t *testing.T) {
-	resultado := SomaTudo([]int{1, 2}, []int{0, 9})
-	esperado := []int{3, 9}
+	resultado := SomaTodoOResto([]int{1, 2}, []int{0, 9})
+	esperado := []int{2, 9}
 
 	if !reflect.DeepEqual(resultado, esperado) {
 		t.Errorf("Resultado '%v', esperado '%v'", resultado, esperado)

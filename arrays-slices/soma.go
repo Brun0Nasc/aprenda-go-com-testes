@@ -8,11 +8,12 @@ func Soma(numeros []int) (soma int) {
 	return
 }
 
-func SomaTudo(numerosParaSomar ...[]int) []int {
+func SomaTodoOResto(numerosParaSomar ...[]int) []int {
 	var somas []int //* Criando slice vazio sem tamanho definido
 
 	for _, numeros := range numerosParaSomar {
-		somas = append(somas, Soma(numeros)) //* Percorrendo parâmetros passados e dando append do resultado da somas deles em somas  
+		final := numeros[1:]
+		somas = append(somas, Soma(final)) //* Percorrendo parâmetros passados e dando append do resultado da somas deles em somas  
 	}
 
 	return somas
