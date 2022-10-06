@@ -20,7 +20,7 @@ func TestSoma(t *testing.T) {
 
 }
 
-func TestSomaTudo(t *testing.T) {
+func TestSomaTodoOResto(t *testing.T) {
 	resultado := SomaTudo([]int{1, 2}, []int{0, 9})
 	esperado := []int{3, 9}
 

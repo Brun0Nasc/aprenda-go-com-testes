@@ -8,13 +8,12 @@ func Soma(numeros []int) (soma int) {
 	return
 }
 
-func SomaTudo(numerosParaSomar ...[]int) (somas []int) {
-	quantidadeDeNumeros := len(numerosParaSomar)
-	somas = make([]int, quantidadeDeNumeros) //* O make permite criar um slice com uma capacidade inicial de *len* *numerosParaSomar* que precisamos percorrer 
+func SomaTudo(numerosParaSomar ...[]int) []int {
+	var somas []int //* Criando slice vazio sem tamanho definido
 
-	for i, numeros := range numerosParaSomar {
-		somas[i] = Soma(numeros)
+	for _, numeros := range numerosParaSomar {
+		somas = append(somas, Soma(numeros)) //* Percorrendo parâmetros passados e dando append do resultado da somas deles em somas  
 	}
 
-	return
+	return somas
 }
