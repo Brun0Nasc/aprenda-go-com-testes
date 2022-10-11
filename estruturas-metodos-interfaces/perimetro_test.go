@@ -11,14 +11,16 @@ func TestAreaPerimetro(t *testing.T) {
 	}
 
 	t.Run("verifica perimetro", func(t *testing.T) {
-		resultado := Perimetro(10.0, 10.0)
+		retangulo := Retangulo{10.0, 10.0}
+		resultado := Perimetro(retangulo)
 		esperado := 40.0
 
 		verificaResultado(t, resultado, esperado)
 	})
 
 	t.Run("verifica area", func(t *testing.T) {
-		resultado := Area(12.0, 6.0)
+		retangulo := Retangulo{12.0, 6.0}
+		resultado := Area(retangulo)
 		esperado := 72.0
 
 		verificaResultado(t, resultado, esperado)
