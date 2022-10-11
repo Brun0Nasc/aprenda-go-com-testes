@@ -22,22 +22,25 @@ func TestSoma(t *testing.T) {
 
 func TestSomaTodoOResto(t *testing.T) {
 
+	verificaSomas := func(t *testing.T, resultado, esperado []int) {
+		t.Helper()
+		if !reflect.DeepEqual(resultado, esperado) {
+			t.Errorf("resultado %v, esperado %v", resultado, esperado)
+		}
+	}
+
 	t.Run("faz a soma de alguns slices", func(t *testing.T) {
 		resultado := SomaTodoOResto([]int{1, 2}, []int{0, 9})
 		esperado := []int{2, 9}
 
-		if !reflect.DeepEqual(resultado, esperado) {
-			t.Errorf("Resultado '%v', esperado '%v'", resultado, esperado)
-		}
+		verificaSomas(t, resultado, esperado)
 	})
 
 	t.Run("soma slices vazios de forma segura", func(t *testing.T) {
-		resultado := SomaTodoOResto([]int{}, []int{3,4,5})
-		esperado := []int{0,9}
+		resultado := SomaTodoOResto([]int{}, []int{3, 4, 5})
+		esperado := []int{0, 9}
 
-		if !reflect.DeepEqual(resultado, esperado) {
-			t.Errorf("resultado %v, esperado %v", resultado, esperado)
-		}
+		verificaSomas(t, resultado, esperado)
 	})
 
 }
