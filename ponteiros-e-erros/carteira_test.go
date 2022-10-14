@@ -5,14 +5,21 @@ import (
 )
 
 func TestCarteira(t *testing.T) {
-
-	confirmaErro := func(t *testing.T, erro error) {
+	//* método auxiliar de teste para verificar erros
+	confirmaErro := func(t *testing.T, valor error, esperado string) {
 		t.Helper()
-		if erro == nil {
-			t.Error("esperava um erro, mas nenhum ocorreu.")
+		if valor == nil {
+			t.Fatal("esperava um erro, mas nenhum ocorreu.")
+		}
+
+		resultado := valor.Error()
+
+		if resultado != esperado {
+			t.Errorf("resultado %s, esperado %s", resultado, esperado)
 		}
 	}
 
+	//* método auxiliar de teste para verificar resultados do teste
 	verificaTeste := func(t *testing.T, carteira Carteira, esperado Bitcoin) {
 		t.Helper()
 		if carteira.saldo != esperado {
@@ -20,6 +27,7 @@ func TestCarteira(t *testing.T) {
 		}
 	}
 
+	//* testes propriamente ditos
 	t.Run("Depositar", func(t *testing.T) {
 		carteira := Carteira{}
 
@@ -46,7 +54,7 @@ func TestCarteira(t *testing.T) {
 		erro := carteira.Retirar(Bitcoin(100))
 
 		verificaTeste(t, carteira, saldoInicial)
-		confirmaErro(t, erro)
+		confirmaErro(t, erro, "saldo insuficiente para retirada")
 	})
 
 }

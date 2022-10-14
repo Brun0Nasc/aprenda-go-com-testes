@@ -11,11 +11,11 @@ type Carteira struct {
 	saldo Bitcoin
 }
 
-type Stringer interface {
+type Stringer interface { //* interface definida no pacote fmt
 	String() string
 }
 
-func (b Bitcoin) String() string {
+func (b Bitcoin) String() string { //* vai definir como seu tipo é impresso quando utilizado com operador de string em prints
 	return fmt.Sprintf("%d BTC", b)
 }
 
@@ -29,7 +29,7 @@ func (c *Carteira) Saldo() Bitcoin {
 
 func (c *Carteira) Retirar(valor Bitcoin) error {
 	if valor > c.saldo {
-		return errors.New("deu nao")
+		return errors.New("saldo insuficiente para retirada")
 	}
 	c.saldo -= valor
 	return nil
