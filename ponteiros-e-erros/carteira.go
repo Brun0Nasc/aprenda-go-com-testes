@@ -5,6 +5,8 @@ import (
 	"fmt"
 )
 
+var ErroSaldoInsuficiente = errors.New("saldo insuficiente para retirada")
+
 type Bitcoin int
 
 type Carteira struct {
@@ -29,7 +31,7 @@ func (c *Carteira) Saldo() Bitcoin {
 
 func (c *Carteira) Retirar(valor Bitcoin) error {
 	if valor > c.saldo {
-		return errors.New("saldo insuficiente para retirada")
+		return ErroSaldoInsuficiente
 	}
 	c.saldo -= valor
 	return nil
