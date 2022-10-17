@@ -1,6 +1,8 @@
 package maps
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestBusca(t *testing.T) {
 	dicionario := Dicionario{"teste": "isso é apenas um teste"}
@@ -21,13 +23,26 @@ func TestBusca(t *testing.T) {
 }
 
 func TestAdiciona(t *testing.T) {
-	dicionario := Dicionario{}
-	palavra := "teste"
-	definicao := "isso é apenas um teste"
+	t.Run("palavra nova", func(t *testing.T) {
+		dicionario := Dicionario{}
+		palavra := "teste"
+		definicao := "isso é apenas um teste"
 
-	dicionario.Adiciona(palavra, definicao)
+		err := dicionario.Adiciona(palavra, definicao)
 
-	comparaDefinicao(t, dicionario, palavra, definicao)
+		comparaErro(t, err, nil)
+		comparaDefinicao(t, dicionario, palavra, definicao)
+	})
+
+	t.Run("palavra existente", func(t *testing.T) {
+		palavra := "teste"
+		definicao := "isso é apenas um teste"
+		dicionario := Dicionario{palavra:definicao}
+		err := dicionario.Adiciona(palavra, "teste novo")
+
+		comparaErro(t, err, ErrPalavraNaoExistente)
+		comparaDefinicao(t, dicionario, palavra, definicao)
+	})
 }
 
 func comparaDefinicao(t *testing.T, dicionario Dicionario, palavra, definicao string) {
