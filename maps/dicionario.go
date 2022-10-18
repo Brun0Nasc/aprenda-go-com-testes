@@ -1,13 +1,17 @@
 package maps
 
-import "errors"
-
 type Dicionario map[string]string
 
-var (
-	ErrNaoEncontrado    = errors.New("não foi possivel encontrar a palavra que voce procura")
-	ErrPalavraNaoExistente = errors.New("não é possível adicionar essa palavra pois ela já existe")
+const (
+	ErrNaoEncontrado    = ErrDicionario("não foi possivel encontrar a palavra que voce procura")
+	ErrPalavraNaoExistente = ErrDicionario("não é possível adicionar essa palavra pois ela já existe")
 )
+
+type ErrDicionario string
+
+func (e ErrDicionario) Error() string {
+	return string(e)
+}
 
 func (d Dicionario) Busca(palavra string) (string, error) {
 	definicao, existe := d[palavra] //* o segundo valor recebe um boolean que informa se a palavra informada existe ou não
@@ -30,4 +34,8 @@ func (d Dicionario) Adiciona(palavra, definicao string) error {
 	}
 
 	return nil
+}
+
+func (d Dicionario) Atualiza(palavra, definicao string) {
+	d[palavra] = definicao
 }
