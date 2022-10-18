@@ -50,3 +50,7 @@ func (d Dicionario) Atualiza(palavra, definicao string) error {
 
 	return nil
 }
+
+func (d Dicionario) Deleta(palavra string) {
+	delete(d, palavra)
+}
