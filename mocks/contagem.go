@@ -1,10 +1,15 @@
 package mocks
 
 import (
-	"bytes"
 	"fmt"
+	"io"
+	"os"
 )
 
-func Contagem(saida *bytes.Buffer){
+func Contagem(saida io.Writer){
 	fmt.Fprintf(saida, "3")
+}
+
+func main(){
+	Contagem(os.Stdout)
 }
