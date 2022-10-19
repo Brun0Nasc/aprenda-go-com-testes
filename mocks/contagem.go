@@ -1,4 +1,4 @@
-package mocks
+package main
 
 import (
 	"fmt"
@@ -6,11 +6,16 @@ import (
 	"os"
 )
 
+const (
+	ultimaPalavra = "Vai!"
+	inicioContagem = 3
+)
+
 func Contagem(saida io.Writer) { //* io.Writer é a interface que vai receber uma fatia de bytes que vai ser mandada para qualquer saída especificada
-	for i := 3; i > 0; i-- {
+	for i := inicioContagem; i > 0; i-- {
 		fmt.Fprintln(saida, i)
 	}
-	fmt.Fprint(saida, "Vai!")
+	fmt.Fprint(saida, ultimaPalavra)
 }
 
 func main() {
