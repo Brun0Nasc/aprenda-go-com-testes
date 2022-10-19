@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 )
 
 const (
@@ -13,6 +14,7 @@ const (
 
 func Contagem(saida io.Writer) { //* io.Writer é a interface que vai receber uma fatia de bytes que vai ser mandada para qualquer saída especificada
 	for i := inicioContagem; i > 0; i-- {
+		time.Sleep(1 * time.Second)
 		fmt.Fprintln(saida, i)
 	}
 	fmt.Fprint(saida, ultimaPalavra)
