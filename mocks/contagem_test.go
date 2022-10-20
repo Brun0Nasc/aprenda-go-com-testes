@@ -4,10 +4,19 @@ import (
 	"bytes"
 	"reflect"
 	"testing"
+	"time"
 )
 
 type SpyContagemOperacoes struct {
 	Chamadas []string
+}
+
+type TempoSpy struct {
+	duracaoPausa time.Duration
+}
+
+func (t *TempoSpy) Pausa(duracao time.Duration) {
+	t.duracaoPausa = duracao
 }
 
 func (s *SpyContagemOperacoes) Pausa() {
@@ -61,4 +70,16 @@ Vai!`
 		}
 	})
 
+}
+
+func TestTempoConfiguravel(t *testing.T) {
+	tempoPausa := 5 * time.Second
+
+	tempoSpy := &TempoSpy{}
+	sleeper := SleeperConfiguravel{tempoPausa, tempoSpy.Pausa}
+	sleeper.Pausa()
+
+	if tempoSpy.duracaoPausa != tempoPausa {
+		t.Errorf("deveria ter pausado por %v, mas pausou por %v", tempoPausa, tempoSpy.duracaoPausa)
+	}
 }

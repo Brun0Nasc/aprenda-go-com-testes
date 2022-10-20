@@ -11,7 +11,12 @@ type Sleeper interface {
 	Pausa()
 }
 
-type SleeperPadrao struct {}
+type SleeperPadrao struct{}
+
+type SleeperConfiguravel struct {
+	duracao time.Duration
+	pausa   func(time.Duration)
+}
 
 const (
 	ultimaPalavra  = "Vai!"
@@ -35,4 +40,8 @@ func main() {
 
 func (d *SleeperPadrao) Pausa() {
 	time.Sleep(1 * time.Second)
+}
+
+func (s *SleeperConfiguravel) Pausa() {
+	s.pausa(s.duracao)
 }
