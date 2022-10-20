@@ -11,8 +11,6 @@ type Sleeper interface {
 	Pausa()
 }
 
-type SleeperPadrao struct{}
-
 type SleeperConfiguravel struct {
 	duracao time.Duration
 	pausa   func(time.Duration)
@@ -34,12 +32,8 @@ func Contagem(saida io.Writer, sleeper Sleeper) { //* io.Writer é a interface q
 }
 
 func main() {
-	sleeper := &SleeperPadrao{}
+	sleeper := &SleeperConfiguravel{1 * time.Second, time.Sleep}
 	Contagem(os.Stdout, sleeper) //* os.Stdout vai definir que a saída desse resultado vai ser no Terminal
-}
-
-func (d *SleeperPadrao) Pausa() {
-	time.Sleep(1 * time.Second)
 }
 
 func (s *SleeperConfiguravel) Pausa() {
