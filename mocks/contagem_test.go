@@ -24,6 +24,10 @@ Vai!`
 	if resultado != esperado {
 		t.Errorf("resultado '%s', esperado '%s'", resultado, esperado)
 	}
+
+	if sleeperSpy.Chamadas != 4 {
+		t.Errorf("não houve chamadas suficientes do sleeper, esperado 4, resultado %d", sleeperSpy.Chamadas)
+	}
 }
 
 func (s *SleeperSpy) Sleep() {
