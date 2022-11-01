@@ -9,23 +9,39 @@ import (
 
 func TestCorredor(t *testing.T) {
 
-	servidorLento := criarServidorComAtraso(20 * time.Millisecond)
-	servidorRapido := criarServidorComAtraso(0 * time.Millisecond)
+	t.Run("teste que da certo", func(t *testing.T) {
+		servidorLento := criarServidorComAtraso(20 * time.Millisecond)
+		servidorRapido := criarServidorComAtraso(0 * time.Millisecond)
 
-	defer servidorRapido.Close()
-	defer servidorLento.Close()
+		defer servidorRapido.Close()
+		defer servidorLento.Close()
 
-	//* Ao chamar uma função com o prefixo defer, ela será chamada após o término da função que a contém.
+		//* Ao chamar uma função com o prefixo defer, ela será chamada após o término da função que a contém.
 
-	URLLenta := servidorLento.URL
-	URLRapida := servidorRapido.URL
+		URLLenta := servidorLento.URL
+		URLRapida := servidorRapido.URL
 
-	esperado := URLRapida
-	resultado := Corredor(URLLenta, URLRapida)
+		esperado := URLRapida
+		resultado, _ := Corredor(URLLenta, URLRapida)
 
-	if resultado != esperado {
-		t.Errorf("resultado '%s', esperado '%s'", resultado, esperado)
-	}
+		if resultado != esperado {
+			t.Errorf("resultado '%s', esperado '%s'", resultado, esperado)
+		}
+	})
+
+	t.Run("retorna erro se o servidor não responder em 10s", func(t *testing.T) {
+		servidorA := criarServidorComAtraso(11 * time.Second)
+		servidorB := criarServidorComAtraso(12 * time.Second)
+
+		defer servidorA.Close()
+		defer servidorB.Close()
+
+		_, err := Corredor(servidorA.URL, servidorB.URL)
+
+		if err == nil {
+			t.Errorf("esperava um erro mas não obtive um")
+		}
+	})
 
 }
 

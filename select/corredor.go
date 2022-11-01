@@ -1,15 +1,19 @@
 package selec
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 )
 
-func Corredor(a, b string) (vencedor string) {
+func Corredor(a, b string) (vencedor string, err error) {
 	select {
 	case <-ping(a):
-		return a
+		return a, nil
 	case <-ping(b):
-		return b
+		return b, nil
+	case <-time.After(10 * time.Second):
+		return "", fmt.Errorf("tempo limite de espera excedido para %s e %s", a, b)
 	}
 }
 
