@@ -2,22 +2,22 @@ package selec
 
 import (
 	"net/http"
-	"time"
 )
 
 func Corredor(a, b string) (vencedor string) {
-	duracaoA := medirTempoResposta(a)
-	duracaoB := medirTempoResposta(b)
-
-	if duracaoA < duracaoB {
+	select {
+	case <-ping(a):
 		return a
+	case <-ping(b):
+		return b
 	}
-
-	return b
 }
 
-func medirTempoResposta(URL string) time.Duration {
-	inicio := time.Now()
-	http.Get(URL)
-	return time.Since(inicio)
+func ping(URL string) chan bool {
+	ch := make(chan bool)
+	go func() {
+		http.Get(URL)
+		ch <- true
+	}()
+	return ch
 }
