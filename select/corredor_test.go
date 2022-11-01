@@ -9,7 +9,7 @@ import (
 
 func TestCorredor(t *testing.T) {
 
-	t.Run("teste que da certo", func(t *testing.T) {
+	t.Run("compara a velocidade de servidores, retornando o endereço mais rápido", func(t *testing.T) {
 		servidorLento := criarServidorComAtraso(20 * time.Millisecond)
 		servidorRapido := criarServidorComAtraso(0 * time.Millisecond)
 
@@ -22,7 +22,11 @@ func TestCorredor(t *testing.T) {
 		URLRapida := servidorRapido.URL
 
 		esperado := URLRapida
-		resultado, _ := Corredor(URLLenta, URLRapida)
+		resultado, err := Corredor(URLLenta, URLRapida)
+
+		if err != nil {
+			t.Fatalf("não esperava um erro, mas obteve um %v", err)
+		}
 
 		if resultado != esperado {
 			t.Errorf("resultado '%s', esperado '%s'", resultado, esperado)
@@ -30,13 +34,11 @@ func TestCorredor(t *testing.T) {
 	})
 
 	t.Run("retorna erro se o servidor não responder em 10s", func(t *testing.T) {
-		servidorA := criarServidorComAtraso(11 * time.Second)
-		servidorB := criarServidorComAtraso(12 * time.Second)
+		servidor := criarServidorComAtraso(25 * time.Millisecond)
 
-		defer servidorA.Close()
-		defer servidorB.Close()
+		defer servidor.Close()
 
-		_, err := Corredor(servidorA.URL, servidorB.URL)
+		_, err := Configuravel(servidor.URL, servidor.URL, 20*time.Millisecond)
 
 		if err == nil {
 			t.Errorf("esperava um erro mas não obtive um")
