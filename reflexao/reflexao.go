@@ -11,5 +11,9 @@ func percorre(x interface{}, fn func(entrada string)) {
 		if campo.Kind() == reflect.String { // Tipo
 			fn(campo.String())
 		}
+
+		if campo.Kind() == reflect.Struct {
+			percorre(campo.Interface(), fn) //* Isso é recursividade :O
+		}
 	}
 }

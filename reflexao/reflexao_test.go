@@ -5,6 +5,16 @@ import (
 	"testing"
 )
 
+type Pessoa struct {
+	Nome   string
+	Perfil Perfil
+}
+
+type Perfil struct {
+	Idade  int
+	Cidade string
+}
+
 func TestPercorre(t *testing.T) {
 
 	casos := []struct {
@@ -22,18 +32,26 @@ func TestPercorre(t *testing.T) {
 		{
 			"Struct com dois campos do tipo string",
 			struct {
-				Nome string
+				Nome   string
 				Cidade string
 			}{"Chris", "Londres"},
 			[]string{"Chris", "Londres"},
 		},
 		{
 			"Struct com um campo string e um campo int",
-			struct{
-				Nome string
+			struct {
+				Nome  string
 				Idade int
 			}{"Chris", 33},
 			[]string{"Chris"},
+		},
+		{
+			"Campos aninhados",
+			Pessoa{
+				"Chris",
+				Perfil{33, "Londres"},
+			},
+			[]string{"Chris", "Londres"},
 		},
 	}
 
@@ -44,7 +62,7 @@ func TestPercorre(t *testing.T) {
 				resultado = append(resultado, entrada)
 			})
 
-			if !reflect.DeepEqual(resultado, teste.ChamadasEsperadas){
+			if !reflect.DeepEqual(resultado, teste.ChamadasEsperadas) {
 				t.Errorf("resultado '%v', esperado '%v'", resultado, teste.ChamadasEsperadas)
 			}
 		})
