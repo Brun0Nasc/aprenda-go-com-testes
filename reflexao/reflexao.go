@@ -18,7 +18,7 @@ func percorre(x interface{}, fn func(entrada string)) {
 		}
 	case reflect.Slice, reflect.Array:
 		for i := 0; i < valor.Len(); i++ {
-			percorreValor(valor.Field(i))
+			percorreValor(valor.Index(i))
 		}
 	case reflect.Map:
 		for _, chave := range valor.MapKeys() {

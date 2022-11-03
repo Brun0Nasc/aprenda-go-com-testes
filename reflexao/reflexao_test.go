@@ -77,14 +77,6 @@ func TestPercorre(t *testing.T) {
 			},
 			[]string{"Londres", "Ucrania"},
 		},
-		{
-			"Maps",
-			map[string]string{
-				"Foo":"Bar",
-				"Baz":"Boz",
-			},
-			[]string{"Bar","Boz"},
-		},
 	}
 
 	for _, teste := range casos {
@@ -100,22 +92,30 @@ func TestPercorre(t *testing.T) {
 		})
 	}
 
-	// esperado := "Chris"
-	// var resultado []string
+	t.Run("com maps", func(t *testing.T) {
+		mapA := map[string]string{
+			"Foo":"Bar",
+			"Baz":"Boz",
+		}
 
-	// x := struct {
-	// 	Nome string
-	// }{esperado}
+		var resultado []string
+		percorre(mapA, func(entrada string) {
+			resultado = append(resultado, entrada)
+		})
 
-	// percorre(x, func(entrada string) {
-	// 	resultado = append(resultado, entrada)
-	// })
+		verificaSeContem(t, resultado, "Bar")
+		verificaSeContem(t, resultado, "Boz")
+	})
+}
 
-	// if len(resultado) != 1 {
-	// 	t.Errorf("número incorreto de chamadas de função: resultado %d, esperado %d", len(resultado), 1)
-	// }
-
-	// if resultado[0] != esperado {
-	// 	t.Errorf("resultado '%v', esperado '%v'", resultado[0], esperado)
-	// }
+func verificaSeContem(t *testing.T, palheiro []string, agulha string){
+	contem := false
+	for _, x := range palheiro {
+		if x == agulha {
+			contem = true
+		}
+	}
+	if !contem{
+		t.Errorf("esperava-se que %+v contivesse '%s', mas nao continha", palheiro, agulha)
+	}
 }
