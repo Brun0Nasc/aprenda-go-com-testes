@@ -2,11 +2,14 @@ package reflexao
 
 import "reflect"
 
-func percorre(x interface{}, fn func(entrada string)){
+func percorre(x interface{}, fn func(entrada string)) {
 	valor := reflect.ValueOf(x) //* valor de
-	
+
 	for i := 0; i < valor.NumField(); i++ {
 		campo := valor.Field(i)
-		fn(campo.String())
+
+		if campo.Kind() == reflect.String { // Tipo
+			fn(campo.String())
+		}
 	}
 }

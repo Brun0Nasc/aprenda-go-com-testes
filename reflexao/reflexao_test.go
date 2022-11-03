@@ -27,6 +27,14 @@ func TestPercorre(t *testing.T) {
 			}{"Chris", "Londres"},
 			[]string{"Chris", "Londres"},
 		},
+		{
+			"Struct com um campo string e um campo int",
+			struct{
+				Nome string
+				Idade int
+			}{"Chris", 33},
+			[]string{"Chris"},
+		},
 	}
 
 	for _, teste := range casos {
