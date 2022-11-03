@@ -14,7 +14,7 @@ func percorre(x interface{}, fn func(entrada string)) {
 	case reflect.Struct:
 		quantidadeDeValores = valor.NumField()
 		obtemCampo = valor.Field
-	case reflect.Slice:
+	case reflect.Slice, reflect.Array:
 		quantidadeDeValores = valor.Len()
 		obtemCampo = valor.Index
 	}
