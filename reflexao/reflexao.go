@@ -4,6 +4,9 @@ import "reflect"
 
 func percorre(x interface{}, fn func(entrada string)){
 	valor := reflect.ValueOf(x) //* valor de
-	campo := valor.Field(0) //* campo
-	fn(campo.String())
+	
+	for i := 0; i < valor.NumField(); i++ {
+		campo := valor.Field(i)
+		fn(campo.String())
+	}
 }
