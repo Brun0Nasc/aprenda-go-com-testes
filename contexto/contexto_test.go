@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type SpyStore struct {
+type SpyStore struct { //* mock spystore
 	response  string
 	cancelled bool
 }
