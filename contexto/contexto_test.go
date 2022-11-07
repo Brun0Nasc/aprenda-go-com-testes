@@ -25,8 +25,9 @@ func (s *SpyStore) Cancel() {
 func TestHandler(t *testing.T) {
 	data := "olá, mundo"
 
-	t.Run("caminho feliz", func(t *testing.T) {
-		svr := Server(&SpyStore{response: data})
+	t.Run("retorna os dados da store", func(t *testing.T) {
+		store := SpyStore{response: data}
+		svr := Server(&store)
 
 		request := httptest.NewRequest(http.MethodGet, "/", nil)
 		response := httptest.NewRecorder()
@@ -35,6 +36,10 @@ func TestHandler(t *testing.T) {
 
 		if response.Body.String() != data {
 			t.Errorf(`resultado "%s", esperado "%s"`, response.Body.String(), data)
+		}
+
+		if store.cancelled {
+			t.Error("não deveria ter cancelado a store")
 		}
 	})
 
@@ -57,3 +62,4 @@ func TestHandler(t *testing.T) {
 		}
 	})
 }
+
