@@ -2,6 +2,7 @@ package contexto
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -9,33 +10,78 @@ import (
 )
 
 type SpyStore struct { //* mock spystore
-	response  string
-	cancelled bool
-	t         *testing.T
+	response string
+	t        *testing.T
 }
 
-func (s *SpyStore) Fetch() string {
-	time.Sleep(100 * time.Millisecond)
-	return s.response
+type SpyResponseWriter struct {
+	written bool
 }
 
-func (s *SpyStore) Cancel() {
-	s.cancelled = true
+func (s *SpyResponseWriter) Header() http.Header {
+	s.written = true
+	return nil
 }
 
-func (s *SpyStore) assertWasCancelled() {
-	s.t.Helper()
-	if !s.cancelled {
-		s.t.Errorf("store não foi avisada para cancelar")
+func (s *SpyResponseWriter) Write([]byte) (int, error) {
+	s.written = true
+	return 0, errors.New("não implementado")
+}
+
+func (s *SpyResponseWriter) WriteHeader(StatusCode int) {
+	s.written = true
+}
+
+func (s *SpyStore) Fetch(ctx context.Context) (string, error) {
+	data := make(chan string, 1)
+
+	go func() {
+		var result string
+		for _, c := range s.response {
+			select {
+			case <-ctx.Done():
+				s.t.Log("spy store foi cancelado")
+				return
+			default:
+				time.Sleep(10 * time.Millisecond)
+				result += string(c)
+			}
+		}
+		data <- result
+	}()
+
+	/*
+	* Estamos simulando um processo lento onde construímos o resultado lentamente adicionando
+	* a string, caractere por caractere em uma goroutine. Quando a goroutine termina seu
+	* trabalho, ela escreve a string no channel data. A goroutine escuta o ctx.Done e irá
+	* parar o trabalho se um sinal for enviado nesse channel.
+	 */
+
+	select {
+	case <-ctx.Done():
+		return "", ctx.Err()
+	case res := <-data:
+		return res, nil
 	}
 }
 
-func (s *SpyStore) assertWasNotCancelled() {
-	s.t.Helper()
-	if s.cancelled {
-		s.t.Errorf("store foi avisada para cancelar")
-	}
-}
+// func (s *SpyStore) Cancel() {
+// 	s.cancelled = true
+// }
+
+// func (s *SpyStore) assertWasCancelled() {
+// 	s.t.Helper()
+// 	if !s.cancelled {
+// 		s.t.Errorf("store não foi avisada para cancelar")
+// 	}
+// }
+
+// func (s *SpyStore) assertWasNotCancelled() {
+// 	s.t.Helper()
+// 	if s.cancelled {
+// 		s.t.Errorf("store foi avisada para cancelar")
+// 	}
+// }
 
 func TestHandler(t *testing.T) {
 	data := "olá, mundo"
@@ -53,7 +99,7 @@ func TestHandler(t *testing.T) {
 			t.Errorf(`resultado "%s", esperado "%s"`, response.Body.String(), data)
 		}
 
-		store.assertWasNotCancelled()
+		// store.assertWasNotCancelled()
 	})
 
 	t.Run("avisa a store para cancelar o trabalho se a requisição for cancelada", func(t *testing.T) {
@@ -66,10 +112,12 @@ func TestHandler(t *testing.T) {
 		time.AfterFunc(5*time.Millisecond, cancel)
 		request = request.WithContext(cancellingCtx)
 
-		response := httptest.NewRecorder()
+		response := &SpyResponseWriter{}
 
 		svr.ServeHTTP(response, request)
 
-		store.assertWasCancelled()
+		if response.written {
+			t.Error("uma resposta não deveria ter sido escrita")
+		}
 	})
 }
